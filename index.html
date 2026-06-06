@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House Price Predictor</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    color:white;
+    text-align:center;
+    padding:40px;
+}
+
+.header h1{
+    font-size:2.5rem;
+}
+
+.content{
+    padding:30px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+}
+
+label{
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+input,select{
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:25px;
+    text-align:center;
+    display:none;
+}
+
+.price{
+    font-size:3rem;
+    color:#16a34a;
+    font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+<h1>🏠 House Price Predictor</h1>
+<p>Predict House Prices Using Machine Learning</p>
+</div>
+
+<div class="content">
+
+<div class="grid">
+
+<div class="field">
+<label>Overall Quality</label>
+<input type="number" id="OverallQual" value="7">
+</div>
+
+<div class="field">
+<label>Year Built</label>
+<input type="number" id="YearBuilt" value="2005">
+</div>
+
+<div class="field">
+<label>Year Remodeled</label>
+<input type="number" id="YearRemodAdd" value="2015">
+</div>
+
+<div class="field">
+<label>Basement Area</label>
+<input type="number" id="TotalBsmtSF" value="1200">
+</div>
+
+<div class="field">
+<label>1st Floor Area</label>
+<input type="number" id="1stFlrSF" value="1400">
+</div>
+
+<div class="field">
+<label>Living Area</label>
+<input type="number" id="GrLivArea" value="1800">
+</div>
+
+<div class="field">
+<label>Bathrooms</label>
+<input type="number" id="FullBath" value="2">
+</div>
+
+<div class="field">
+<label>Total Rooms</label>
+<input type="number" id="TotRmsAbvGrd" value="8">
+</div>
+
+<div class="field">
+<label>Garage Cars</label>
+<input type="number" id="GarageCars" value="2">
+</div>
+
+<div class="field">
+<label>Garage Area</label>
+<input type="number" id="GarageArea" value="500">
+</div>
+
+<div class="field">
+<label>Zoning</label>
+<select id="MSZoning">
+<option value="RL">RL</option>
+<option value="RM">RM</option>
+<option value="FV">FV</option>
+<option value="RH">RH</option>
+<option value="C (all)">C (all)</option>
+</select>
+</div>
+
+<div class="field">
+<label>Utilities</label>
+<select id="Utilities">
+<option value="AllPub">AllPub</option>
+<option value="NoSeWa">NoSeWa</option>
+</select>
+</div>
+
+<div class="field">
+<label>Building Type</label>
+<select id="BldgType">
+<option value="1Fam">1 Family</option>
+<option value="2fmCon">2 Family</option>
+<option value="Duplex">Duplex</option>
+<option value="Twnhs">Townhouse</option>
+<option value="TwnhsE">Townhouse End</option>
+</select>
+</div>
+
+<div class="field">
+<label>Heating</label>
+<select id="Heating">
+<option value="GasA">GasA</option>
+<option value="GasW">GasW</option>
+<option value="Floor">Floor</option>
+<option value="Grav">Grav</option>
+<option value="Wall">Wall</option>
+</select>
+</div>
+
+<div class="field">
+<label>Kitchen Quality</label>
+<select id="KitchenQual">
+<option value="Ex">Excellent</option>
+<option value="Gd">Good</option>
+<option value="TA">Typical</option>
+<option value="Fa">Fair</option>
+</select>
+</div>
+
+<div class="field">
+<label>Sale Condition</label>
+<select id="SaleCondition">
+<option value="Normal">Normal</option>
+<option value="Abnorml">Abnormal</option>
+<option value="AdjLand">AdjLand</option>
+<option value="Alloca">Alloca</option>
+<option value="Family">Family</option>
+<option value="Partial">Partial</option>
+</select>
+</div>
+
+<div class="field">
+<label>Land Slope</label>
+<select id="LandSlope">
+<option value="Gtl">Gentle</option>
+<option value="Mod">Moderate</option>
+<option value="Sev">Severe</option>
+</select>
+</div>
+
+</div>
+
+<button onclick="predictPrice()">Predict House Price</button>
+
+<div class="result" id="result">
+<h2>Estimated House Price</h2>
+<div class="price" id="price"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+async function predictPrice(){
+
+const payload = {
+OverallQual:+document.getElementById("OverallQual").value,
+YearBuilt:+document.getElementById("YearBuilt").value,
+YearRemodAdd:+document.getElementById("YearRemodAdd").value,
+TotalBsmtSF:+document.getElementById("TotalBsmtSF").value,
+"1stFlrSF":+document.getElementById("1stFlrSF").value,
+GrLivArea:+document.getElementById("GrLivArea").value,
+FullBath:+document.getElementById("FullBath").value,
+TotRmsAbvGrd:+document.getElementById("TotRmsAbvGrd").value,
+GarageCars:+document.getElementById("GarageCars").value,
+GarageArea:+document.getElementById("GarageArea").value,
+
+MSZoning:document.getElementById("MSZoning").value,
+Utilities:document.getElementById("Utilities").value,
+BldgType:document.getElementById("BldgType").value,
+Heating:document.getElementById("Heating").value,
+KitchenQual:document.getElementById("KitchenQual").value,
+SaleCondition:document.getElementById("SaleCondition").value,
+LandSlope:document.getElementById("LandSlope").value
+};
+
+const response = await fetch("/predict",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify(payload)
+});
+
+const data = await response.json();
+
+document.getElementById("result").style.display="block";
+document.getElementById("price").innerText =
+"₹" + Number(data.predicted_price).toLocaleString("en-IN");
+}
+</script>
+
+</body>
+</html>
